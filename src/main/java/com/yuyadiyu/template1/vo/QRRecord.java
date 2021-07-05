@@ -12,8 +12,8 @@ public class QRRecord {
     @ApiModelProperty(value = "名称",required = true)
     @TableField("qrCodeName")
     private String qrCodeName;
-    @ApiModelProperty(value = "二维码byte")
-    @TableField("imageDatas")
-    private byte[] imageDatas;
+    @ApiModelProperty(value = "二维码生成地址")
+    @TableField("imageURL")
+    private String imageURL;
 
 }
