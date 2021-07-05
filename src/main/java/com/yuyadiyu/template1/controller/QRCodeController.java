@@ -3,35 +3,22 @@ package com.yuyadiyu.template1.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yuyadiyu.template1.dao.QRCodeMapper;
-//import com.yuyadiyu.template1.service.QRCodeRecordService;
 import com.yuyadiyu.template1.util.QRCodeUtil;
 import com.yuyadiyu.template1.vo.QRRecord;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static com.yuyadiyu.template1.util.FileChargeUtil.*;
 
 
 @Controller
 public class QRCodeController {
-//    @Autowired
-//    private QRCodeRecordService qrCodeRecordService;
-
     @Resource
     private QRCodeMapper qrCodeMapper;
-
     @Value("${localURL}")
     private String URL;
     /**
@@ -61,8 +48,9 @@ public class QRCodeController {
         }
         return datas;
     }
-    @ApiOperation(value="生成二维码",notes = "根据url生成带有logo的二维码 \n并保存传入二维码名称\n" +
-            "请求方式为get，url为二维码；name为二维码名称，logopath为logo路径")
+
+    @ApiOperation(value="查询二维码",notes = "根据二维码编号查询二维码图片保存路径" +
+            "请求方式为get，name为二维码名称，返回二维码byte流")
     @GetMapping(value = "/getQRCode",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] getQRCode(String name) throws Exception {
