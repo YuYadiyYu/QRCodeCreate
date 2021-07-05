@@ -1,0 +1,16 @@
+localURL: /usr/local/insigma/create-code/QRCode/
+server:
+  port: 4936
+spring:
+  thymeleaf:
+    prefix:
+      classpath: /templates/
+      suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+  datasource:
+    url: jdbc:mysql://192.168.8.203:3306/create-code?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2b8&useSSL=false
+    username: root
+    password: insigma@2020
+    driver-class-name: com.mysql.cj.jdbc.Driver
+

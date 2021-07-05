@@ -5,6 +5,9 @@ import com.yuyadiyu.template1.dao.QRCodeMapper;
 //import com.yuyadiyu.template1.service.QRCodeRecordService;
 import com.yuyadiyu.template1.util.QRCodeUtil;
 import com.yuyadiyu.template1.vo.QRRecord;
+import io.swagger.annotations.ApiOperation;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,34 +27,40 @@ public class QRCodeController {
 
     @Resource
     private QRCodeMapper qrCodeMapper;
+
+    @Value("${localURL}")
+    private String URL;
     /**
      * 根据 url 生成 普通二维码
      */
-    @RequestMapping(value = "/createCommonQRCode")
-    public void createCommonQRCode(HttpServletResponse response, String url) throws Exception {
-        ServletOutputStream stream = null;
-        try {
-            stream = response.getOutputStream();
-            //使用工具类生成二维码
-            QRCodeUtil.encode(url, stream);
-        } catch (Exception e) {
-            e.getStackTrace();
-        } finally {
-            if (stream != null) {
-                stream.flush();
-                stream.close();
-            }
-        }
-    }
+//    @RequestMapping(value = "/createCommonQRCode")
+//    public void createCommonQRCode(HttpServletResponse response, String url) throws Exception {
+//        ServletOutputStream stream = null;
+//        try {
+//            stream = response.getOutputStream();
+//            //使用工具类生成二维码
+//            QRCodeUtil.encode(url, stream);
+//        } catch (Exception e) {
+//            e.getStackTrace();
+//        } finally {
+//            if (stream != null) {
+//                stream.flush();
+//                stream.close();
+//            }
+//        }
+//    }
 
     /**
      * 根据 url 生成 带有logo二维码
      * @return
      */
+    @ApiOperation(value="生成二维码",notes = "根据url生成带有logo的二维码 \n并保存传入二维码名称\n" +
+            "请求方式为get，url为二维码；name为二维码名称，logopath为logo路径")
     @GetMapping(value = "/createLogoQRCode",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public byte[] createLogoQRCode(String url, String name,String logoPath) throws Exception {
-        String localImagePath = "E:/idea_create_file/QRCode/"+name+".jpg";
+    public byte[] createLogoQRCode(String url, String name) throws Exception {
+        String logoPath = URL + "logo.jpg";
+        String localImagePath = URL + name+".jpg";
         OutputStream stream2 = new FileOutputStream(localImagePath);
         byte[] datas = null;
         QRRecord qr = new QRRecord();
@@ -80,6 +89,7 @@ public class QRCodeController {
     }
 
     //查询id为1的
+    @ApiOperation(value="查询数据库中的记录",notes = "根据插入id查询二维码生成详情")
     @GetMapping(value="selectQRCode",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] selectQRCode(int id) throws IOException {
